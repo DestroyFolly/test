@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build and run with Docker Compose
-        uses: docker/compose-action@v2
+        uses: docker/compose-action@v3
         with:
           # Путь к docker-compose.yml (если не в корне репозитория)
           file: '../../src/docker-compose.yml'
