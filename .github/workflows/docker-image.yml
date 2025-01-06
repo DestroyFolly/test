@@ -1,18 +1,35 @@
-name: Docker Image CI
+name: CI Testing
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main" ] # Запускать при пуше в main
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main" ] # Запускать при pull request в main
 
 jobs:
-
-  build:
-
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"] # Укажите нужную версию Python
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'poetry' # Кэшируем зависимости Poetry
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Run tests
+        run: poetry run pytest --alluredir=allure-results tests/ # Запуск тестов pytest и сохранение результатов в allure-results для Allure TestOps
+      - name: Upload allure results
+        uses: actions/upload-artifact@v3 #  отчет pytest 
+        with:
+            name: allure-results
+            path: allure-results/
