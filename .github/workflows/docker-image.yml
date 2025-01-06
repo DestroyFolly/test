@@ -1,38 +1,20 @@
-name: CI Testing
+name: Docker Compose CI
 
 on:
   push:
-    branches: [ "main" ] # Запускать при пуше в main
-  pull_request:
-    branches: [ "main" ] # Запускать при pull request в main
+    branches: [ main ] # Или другая ветка
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10"] # Укажите нужную версию Python
-
     steps:
       - uses: actions/checkout@v3
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Build and run with Docker Compose
+        uses: docker/compose-action@v2
         with:
-          version: 1.1.13 #  Укажите нужную версию Poetry
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'poetry' # Кэшируем зависимости Poetry
-
-      - name: Install dependencies
-        run: |
-          poetry install
-
-      - name: Run tests
-        run: poetry run pytest --alluredir=allure-results tests/ # Запуск тестов pytest и сохранение результатов в allure-results для Allure TestOps
-      - name: Upload allure results
-        uses: actions/upload-artifact@v3 #  отчет pytest 
-        with:
-            name: allure-results
-            path: allure-results/
+          # Путь к docker-compose.yml (если не в корне репозитория)
+          file: '../../src/docker-compose.yml'
+          run: | # Запускаем необходимые сервисы и команды
+            docker compose up -d --build postgres # Запускаем PostgreSQL
+            docker compose run --rm app # Выполняем команду внутри контейнера 'app' (замените на вашу команду)
+            docker compose down # Останавливаем и удаляем контейнеры
