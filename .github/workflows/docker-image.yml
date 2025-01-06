@@ -10,17 +10,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
-      - uses: docker/build-push-action@v4
+      - name: Build and run tests
+        uses: docker/build-push-action@v4
         with:
           context: .
-          file: ../../src/docker-compose.yml  # Укажите путь к вашему docker-compose.yml
-          push: false # Не пушим образ в registry
+          file: ./src/docker-compose.yml
+          push: false
           targets: app #  Собираем только сервис 'app'
-      - name: Run tests
-        uses: docker/compose-action@v2
-        with:
-          file: ../../src/docker-compose.yml
-          run: |
-            docker-compose up -d --build postgres # Запускаем PostgreSQL
-            docker-compose run --rm app poetry run pytest tests/ #  ОБЯЗАТЕЛЬНО укажите команду для app
-            docker-compose down # Останавливаем и удаляем контейнеры
+          args: | # Передаем команду для запуска тестов
+            PYTEST_COMMAND: poetry run pytest tests/
