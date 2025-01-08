@@ -118,7 +118,7 @@ peewee==3.17.0
 # pefile==2023.2.7 -- Убран, не нужен в Linux
 pewee==0.1.0.dev9
 pexpect==4.9.0
-pidantic==0.1.2
+# pidantic==0.1.2
 Pillow==10.1.0
 pkginfo==1.10.0
 platformdirs==4.2.0
