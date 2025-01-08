@@ -72,7 +72,7 @@ hiku==0.7.2
 hpack==4.0.0
 Hypercorn==0.16.0
 hyperframe==6.0.1
-idna==3.7
+#idna==3.7
 imageio==2.34.2
 importlib_metadata==7.1.0  # Если используешь Python 3.8+, можешь убрать
 inflect==5.6.2
