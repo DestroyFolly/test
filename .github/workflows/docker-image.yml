@@ -32,7 +32,7 @@ jobs:
       - name: Run unit tests
         run: |
           cd src/tests
-          if ${{ inputs.parallel }}; then
+          if [[ "${{ inputs.parallel }}" == "true" ]]; then
             pytest -n auto --alluredir=allure-results user_tests.py product_tests.py product_cart_tests.py product_order_tests.py payment_tests.py order_tests.py cart_tests.py
           else
             pytest --alluredir=allure-results user_tests.py product_tests.py product_cart_tests.py product_order_tests.py payment_tests.py order_tests.py cart_tests.py
@@ -69,7 +69,7 @@ jobs:
       - name: Run integration tests
         run: |
           cd src/tests
-          if ${{ inputs.parallel }}; then
+          if [[ "${{ inputs.parallel }}" == "true" ]]; then
             pytest -n auto --alluredir=allure-results integration_tests.py
           else
             pytest --alluredir=allure-results integration_tests.py
@@ -106,7 +106,7 @@ jobs:
       - name: Run e2e tests
         run: |
           cd src/tests
-          if ${{ inputs.parallel }}; then
+          if [[ "${{ inputs.parallel }}" == "true" ]]; then
             pytest -n auto --alluredir=allure-results e2e.py
           else
             pytest --alluredir=allure-results e2e.py
