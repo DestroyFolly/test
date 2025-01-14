@@ -3,6 +3,13 @@ name: CI Pipeline
 on:
   push:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      parallel:
+        description: 'Run tests in parallel? (true/false)'
+        required: true
+        default: 'false'
+        type: boolean
 
 jobs:
   unit_tests:
@@ -25,7 +32,12 @@ jobs:
       - name: Run unit tests
         run: |
           cd src/tests
-          pytest --alluredir=allure-results user_tests.py product_tests.py product_cart_tests.py product_order_tests.py payment_tests.py order_tests.py cart_tests.py
+          if ${{ inputs.parallel }}; then
+            pytest -n auto --alluredir=allure-results user_tests.py product_tests.py product_cart_tests.py product_order_tests.py payment_tests.py order_tests.py cart_tests.py
+          else
+            pytest --alluredir=allure-results user_tests.py product_tests.py product_cart_tests.py product_order_tests.py payment_tests.py order_tests.py cart_tests.py
+          fi
+
   integration_tests:
     name: Integration Tests
     runs-on: ubuntu-latest
@@ -57,7 +69,12 @@ jobs:
       - name: Run integration tests
         run: |
           cd src/tests
-          pytest --alluredir=allure-results integration_tests.py
+          if ${{ inputs.parallel }}; then
+            pytest -n auto --alluredir=allure-results integration_tests.py
+          else
+            pytest --alluredir=allure-results integration_tests.py
+          fi
+
   e2e_tests:
     name: End-to-End Tests
     runs-on: ubuntu-latest
@@ -86,22 +103,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r ./src/requirements.txt
 
-      - name: Run e2e tests part1
+      - name: Run e2e tests
         run: |
           cd src/tests
-          pytest --alluredir=allure-results e2e.py
-          
-      - name: Run e2e tests part2
-        run: |
-          cd src/tests
-          pytest --alluredir=allure-results e2e.py
-          
-      - name: Run e2e tests part3
-        run: |
-          cd src/tests
-          pytest --alluredir=allure-results e2e.py
-          
-      - name: Run e2e tests part4
-        run: |
-          cd src/tests
-          pytest --alluredir=allure-results e2e.py
+          if ${{ inputs.parallel }}; then
+            pytest -n auto --alluredir=allure-results e2e.py
+          else
+            pytest --alluredir=allure-results e2e.py
+          fi

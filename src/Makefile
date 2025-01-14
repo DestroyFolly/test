@@ -12,13 +12,13 @@ mypy_check:
 	mypy .
 
 unit_tests:
-    pytest --alluredir=allure-results tests\user_tests.py tests\payment_tests.py tests\product_cart_tests.py tests\product_order_tests.py tests\cart_tests.py tests\order_tests.py tests\product_tests.py
+	pytest --alluredir=allure-results tests\user_tests.py tests\payment_tests.py tests\product_cart_tests.py tests\product_order_tests.py tests\cart_tests.py tests\order_tests.py tests\product_tests.py
 
 integration_tests:
-    pytest --alluredir=allure-results tests\integration_tests.py
+	pytest --alluredir=allure-results tests\integration_tests.py
 
 e2e_tests:
-    pytest --alluredir=allure-results tests\e2e.py
+	pytest --alluredir=allure-results tests\e2e.py
 
 
 
