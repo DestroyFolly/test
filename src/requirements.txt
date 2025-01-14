@@ -158,6 +158,7 @@ pyrsistent==0.20.0
 pytest==8.3.3
 pytest-asyncio==0.24.0
 pytest-html==4.1.1
+pytest-xdist==1.38.0
 pytest-metadata==3.1.1
 pytest-random-order==1.1.1
 python-dateutil==2.8.2
