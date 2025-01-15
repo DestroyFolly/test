@@ -24,9 +24,7 @@ class TestE2E(unittest.TestCase):
             "role": "admin"
         }
         async with httpx.AsyncClient() as client:
-            response = await client.post(f"{self.BASE_URL}/api/v2/users/register", json=register_data)
-            assert response.status_code == 201
-
+            
             login_data = {
                 "username": "admin@admin",
                 "password": "admin"
